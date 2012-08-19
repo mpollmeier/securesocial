@@ -31,8 +31,8 @@ import java.util.Map;
  */
 public class UsernamePasswordProvider extends IdentityProvider
 {
-    private static final String USER_NAME = "userName";
-    private static final String PASSWORD = "password";
+    public static final String USER_NAME = "userName";
+    public static final String PASSWORD = "password";
     private static final String SECURESOCIAL_REQUIRED = "securesocial.required";
     private static final String SECURESOCIAL_BAD_USER_PASSWORD_COMBINATION = "securesocial.badUserPasswordCombination";
     private static final String SECURESOCIAL_ACCOUNT_NOT_ACTIVE = "securesocial.accountNotActive";

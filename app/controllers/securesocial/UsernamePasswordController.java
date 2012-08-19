@@ -26,6 +26,7 @@ import play.data.validation.Required;
 import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Router;
+import play.mvc.Scope;
 import securesocial.provider.*;
 import securesocial.provider.providers.UsernamePasswordProvider;
 import securesocial.utils.SecureSocialPasswordHasher;
@@ -100,12 +101,15 @@ public class UsernamePasswordController extends Controller
         }
 
         if (UsernamePasswordProvider.isActivationNecessary()) {
-	        // create an activation id
 	        final String uuid = UserService.createActivation(user);
+	        Logger.info("created activation id=" + uuid + " for user=" + userName);
 	        Mails.sendActivationEmail(user, uuid);
 	        flash.success(Messages.get(SECURESOCIAL_ACCOUNT_CREATED));
 	        final String title = Messages.get(SECURESOCIAL_ACTIVATION_TITLE, user.displayName);
 	        render(SECURESOCIAL_SECURE_SOCIAL_NOTICE_PAGE_HTML, title);
+        } else {
+        	flash.success(Messages.get(SECURESOCIAL_ACTIVATION_SUCCESS, Router.reverse(SECURESOCIAL_SECURE_SOCIAL_LOGIN)));
+        	SecureSocial.login();
         }
     }
 
