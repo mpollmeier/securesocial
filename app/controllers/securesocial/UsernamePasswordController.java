@@ -67,7 +67,7 @@ public class UsernamePasswordController extends Controller
      * @param password2     The password verification
      */
     public static void createAccount(@Required(message = "securesocial.required") String userName,
-                                     @Required String displayName,
+                                     String displayName,
                                      @Required @Email(message = "securesocial.invalidEmail") String email,
                                      @Required String password,
                                      @Required @Equals(message = "securesocial.passwordsMustMatch", value = "password") String password2) {
