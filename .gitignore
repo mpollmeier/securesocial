@@ -21,3 +21,5 @@ eclipse
 *.iml
 *.ipr
 *.iws
+bin/
+tmp/
