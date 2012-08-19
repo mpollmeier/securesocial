@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 Jorge Aliss (jaliss at gmail dot com) - twitter: @jaliss 
+ * Copyright 2011 Jorge Aliss (jaliss at gmail dot com) - twitter: @jaliss
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package controllers.securesocial;
 
 import notifiers.securesocial.Mails;
 import play.Logger;
+import play.Play;
 import play.data.validation.Email;
 import play.data.validation.Equals;
 import play.data.validation.Required;
@@ -26,6 +27,7 @@ import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Router;
 import securesocial.provider.*;
+import securesocial.provider.providers.UsernamePasswordProvider;
 import securesocial.utils.SecureSocialPasswordHasher;
 
 /**
@@ -97,15 +99,17 @@ public class UsernamePasswordController extends Controller
             tryAgain(userName, displayName, email);
         }
 
-        // create an activation id
-        final String uuid = UserService.createActivation(user);
-        Mails.sendActivationEmail(user, uuid);
-        flash.success(Messages.get(SECURESOCIAL_ACCOUNT_CREATED));
-        final String title = Messages.get(SECURESOCIAL_ACTIVATION_TITLE, user.displayName);
-        render(SECURESOCIAL_SECURE_SOCIAL_NOTICE_PAGE_HTML, title);
+        if (UsernamePasswordProvider.isActivationNecessary()) {
+	        // create an activation id
+	        final String uuid = UserService.createActivation(user);
+	        Mails.sendActivationEmail(user, uuid);
+	        flash.success(Messages.get(SECURESOCIAL_ACCOUNT_CREATED));
+	        final String title = Messages.get(SECURESOCIAL_ACTIVATION_TITLE, user.displayName);
+	        render(SECURESOCIAL_SECURE_SOCIAL_NOTICE_PAGE_HTML, title);
+        }
     }
 
-    private static void tryAgain(String username, String displayName, String email) {
+	private static void tryAgain(String username, String displayName, String email) {
         flash.put(USER_NAME, username);
         flash.put(DISPLAY_NAME, displayName);
         flash.put(EMAIL, email);

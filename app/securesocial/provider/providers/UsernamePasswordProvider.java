@@ -17,6 +17,7 @@
 package securesocial.provider.providers;
 
 import controllers.securesocial.SecureSocial;
+import play.Play;
 import play.data.validation.Validation;
 import play.i18n.Messages;
 import play.mvc.Scope;
@@ -36,6 +37,8 @@ public class UsernamePasswordProvider extends IdentityProvider
     private static final String SECURESOCIAL_BAD_USER_PASSWORD_COMBINATION = "securesocial.badUserPasswordCombination";
     private static final String SECURESOCIAL_ACCOUNT_NOT_ACTIVE = "securesocial.accountNotActive";
     private static final String SECURESOCIAL_WRONG_USER_PASS = "securesocial.wrongUserPass";
+
+    private static final String CONFIG_ENFORCE_EMAIL_ACTIVATION = "securesocial.enforceActivation";
 
     public UsernamePasswordProvider() {
         super(ProviderType.userpass, AuthenticationMethod.USER_PASSWORD);
@@ -77,7 +80,7 @@ public class UsernamePasswordProvider extends IdentityProvider
             SecureSocial.login();
         }
 
-        if ( !user.isEmailVerified) {
+        if (isActivationNecessary() && !user.isEmailVerified) {
                 flash.error(Messages.get(SECURESOCIAL_ACCOUNT_NOT_ACTIVE));
                 SecureSocial.login();
             }
@@ -98,4 +101,12 @@ public class UsernamePasswordProvider extends IdentityProvider
         // there's nothing to do here, since the user is being loaded from the DB it should already have
         // all the required fields set.
     }
+
+    /**
+     * checks if email activation is configured as active - defaults to false
+     */
+    public static boolean isActivationNecessary() {
+    	return "true".equalsIgnoreCase(
+    			Play.configuration.getProperty(CONFIG_ENFORCE_EMAIL_ACTIVATION, "false"));
+	}
 }

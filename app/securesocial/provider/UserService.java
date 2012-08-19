@@ -59,6 +59,8 @@ public class UserService {
          * Creates an activation request.  This is needed for users that
          * are creating an account in the system instead of using one in a 3rd party system.
          *
+         * Only called if configuration contains: securesocial.enforceActivation = true
+         *
          * @param user The user that needs to be activated
          * @return A string with a uuid that will be embedded in the welcome email.
          */
@@ -67,6 +69,8 @@ public class UserService {
         /**
          * Activates a user by setting the isEmailVerified field to true.  This is only used
          * for UsernamePassword accounts.
+         *
+         * Only called if configuration contains: securesocial.enforceActivation = true
          *
          * @param uuid The uuid created using the createActivation method.
          * @return Returns true if the user was activated - false otherwise.
@@ -152,6 +156,7 @@ public class UserService {
     }
 
     /**
+     * Only called if configuration contains: securesocial.enforceActivation = true
      * @see securesocial.provider.UserService.Service#createActivation(SocialUser)
      */
     public static String createActivation(SocialUser user) {
@@ -160,6 +165,7 @@ public class UserService {
     }
 
     /**
+     * Only called if configuration contains: securesocial.enforceActivation = true
      * @see securesocial.provider.UserService.Service#activate(String)
      */
     public static boolean activate(String uuid) {
