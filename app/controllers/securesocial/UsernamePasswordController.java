@@ -109,6 +109,7 @@ public class UsernamePasswordController extends Controller
 	        render(SECURESOCIAL_SECURE_SOCIAL_NOTICE_PAGE_HTML, title);
         } else {
         	flash.success(Messages.get(SECURESOCIAL_ACTIVATION_SUCCESS, Router.reverse(SECURESOCIAL_SECURE_SOCIAL_LOGIN)));
+        	flash.put(USER_NAME, userName);
         	SecureSocial.login();
         }
     }
