@@ -68,7 +68,7 @@ public class UsernamePasswordController extends Controller
      */
     public static void createAccount(@Required(message = "securesocial.required") String userName,
                                      String displayName,
-                                     @Required @Email(message = "securesocial.invalidEmail") String email,
+                                     @Email(message = "securesocial.invalidEmail") String email,
                                      @Required String password,
                                      @Required @Equals(message = "securesocial.passwordsMustMatch", value = "password") String password2) {
         if ( validation.hasErrors() ) {
