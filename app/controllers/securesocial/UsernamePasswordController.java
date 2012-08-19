@@ -17,6 +17,8 @@
  */
 package controllers.securesocial;
 
+import java.util.Collection;
+
 import notifiers.securesocial.Mails;
 import play.Logger;
 import play.Play;
@@ -30,6 +32,7 @@ import play.mvc.Scope;
 import securesocial.provider.*;
 import securesocial.provider.providers.UsernamePasswordProvider;
 import securesocial.utils.SecureSocialPasswordHasher;
+import ugot.recaptcha.Recaptcha;
 
 /**
  * The controller for the UI required by the Username Password Provider.
@@ -54,7 +57,9 @@ public class UsernamePasswordController extends Controller
      * Renders the sign up page.
      */
      public static void signup() {
-        render();
+    	 final Collection providers = ProviderRegistry.all();
+         boolean userPassEnabled = ProviderRegistry.get(ProviderType.userpass) != null;
+         render(providers, userPassEnabled);
     }
 
     /**
@@ -70,7 +75,9 @@ public class UsernamePasswordController extends Controller
                                      String displayName,
                                      @Email(message = "securesocial.invalidEmail") String email,
                                      @Required String password,
-                                     @Required @Equals(message = "securesocial.passwordsMustMatch", value = "password") String password2) {
+                                     @Required @Equals(message = "securesocial.passwordsMustMatch", value = "password") String password2,
+                                     @Recaptcha String captcha) {
+    	flash.put("forSignup", true);
         if ( validation.hasErrors() ) {
             tryAgain(userName, displayName, email);
         }
